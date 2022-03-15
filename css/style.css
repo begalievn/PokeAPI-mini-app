@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Rubik";
+}
+
+.container {
+  padding: 40px;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: rgb(195, 211, 199);
+  padding: 40px;
+  list-style: none;
+  text-align: center;
+  border: inset 4px;
+}
+
+.card:hover {
+  animation: bounce 0.5s linear;
+}
+
+@keyframes bounce {
+  20% {
+    transform: translateY(-6px);
+  }
+  40% {
+    transform: translateY(0px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+  80% {
+    transform: translateY(0px);
+  }
+}
+
+.card-title {
+  text-transform: uppercase;
+  font-size: 32px;
+  font-weight: normal;
+  /* margin-bottom: 0; */
+}
+
+.card-subtitle {
+  font-weight: lighter;
+  font-size: 20px;
+  color: #666;
+}
+
+.card-image {
+  height: 180px;
+}
+
+.container {
+  height: 900px;
+  background-color: rgb(247, 252, 188);
+}
+
+#pokedex {
+  padding-inline-start: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-gap: 20px;
+  overflow-y: scroll;
+  height: 95%;
+  border: solid 2px black;
+}
