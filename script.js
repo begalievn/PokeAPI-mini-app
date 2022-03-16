@@ -23,7 +23,7 @@ const fetchPokemon = () => {
   });
 };
 
-/* Display pokemons on ol element */
+/* Display all pokemons on ol element */
 const displayPokemon = (pokemon) => {
   let pokemonHTMLString = pokemon
     .map((poke) => {
@@ -32,7 +32,11 @@ const displayPokemon = (pokemon) => {
         <img class="card-image" src="${poke.image}" />
         <h2 class="card-title">${poke.id}. ${poke.name}</h2>
         <p class="card-subtitle">Type: ${poke.type}</p>
-        <button  class="" 
+        <button  class="${
+          isThisElementInFavorites(poke.id, favoritesArray)
+            ? "favorite-true"
+            : ""
+        }" 
           onclick="favoriteButton(this)" 
         >
           Favorite
@@ -58,29 +62,40 @@ searchInput.addEventListener("keydown", (e) => {
   }
 });
 
-/* Favorite Button to add pokemon to favorites localStorage */
+/* Favorite Button to add pokemon to favorites localStorage if it is not already there */
 async function favoriteButton(element) {
   let liElement = element.parentElement;
   let idOfElement = liElement.id;
   let dataOfPokemon = await fetchPokemonById(idOfElement);
-  console.log(dataOfPokemon);
-  console.log("favorite button clicked");
+  let indexInArray = findIndexOfElementInArrayById(
+    dataOfPokemon.id,
+    favoritesArray
+  );
+  if (indexInArray >= 0) {
+    favoritesArray.splice(indexInArray, 1);
+  } else {
+    favoritesArray.push(dataOfPokemon);
+  }
+  localStorage.setItem("favorites", JSON.stringify(favoritesArray));
+  console.log(JSON.parse(localStorage.getItem("favorites")));
+  fetchPokemon();
 }
 
+/* Fetch a pokemon data by an id */
 function fetchPokemonById(id) {
   const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-  let pokemon = fetch(url).then((res) => res.json());
-  // .then((data) => {
-  //   return {
-  //     name: data.name,
-  //     id: data.id,
-  //     image: data.sprites["front_default"],
-  //     type: data.types.map((type) => type.type.name).join(", "),
-  //   };
-  // });
+  let pokemon = fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        name: data.name,
+        id: data.id,
+        image: data.sprites["front_default"],
+        type: data.types.map((type) => type.type.name).join(", "),
+      };
+    });
+  return pokemon;
 }
-
-// fetchPokemonById(1);
 
 /* Function to get an index of element from the pokemonsArray */
 function getIndexFromPokemonsArray(element) {
@@ -89,4 +104,14 @@ function getIndexFromPokemonsArray(element) {
     return poke.id === Number(idOfElement);
   });
   return indexInArray;
+}
+
+function isThisElementInFavorites(id, array) {
+  let index = array.findIndex((data) => data.id === id);
+  return index >= 0 ? true : false;
+}
+
+function findIndexOfElementInArrayById(id, array) {
+  let index = array.findIndex((data) => data.id === id);
+  return index;
 }

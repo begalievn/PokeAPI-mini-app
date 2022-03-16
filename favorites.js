@@ -8,7 +8,15 @@ const displayPokemon = (pokemon) => {
         <img class="card-image" src="${poke.image}" />
         <h2 class="card-title">${poke.id}. ${poke.name}</h2>
         <p class="card-subtitle">Type: ${poke.type}</p>
-        <button onclick="favoriteButton(this)">Favorite</button>
+        <button  class="${
+          isThisElementInFavorites(poke.id, favoritesArray)
+            ? "favorite-true"
+            : ""
+        }" 
+          onclick="favoriteButton(this)" 
+        >
+          Favorite
+        </button>
       </li>
     `;
     })
@@ -20,6 +28,20 @@ const displayPokemon = (pokemon) => {
 displayPokemon(favoritesArray);
 
 function favoriteButton(element) {
-  console.log(element.parentElement);
-  console.log("button clicked from favorites ");
+  let liElement = element.parentElement;
+  let liElementId = Number(liElement.id);
+  let indexInArray = findIndexOfElementInArrayById(liElementId, favoritesArray);
+  favoritesArray.splice(indexInArray, 1);
+  localStorage.setItem("favorites", JSON.stringify(favoritesArray));
+  displayPokemon(favoritesArray);
+}
+
+function isThisElementInFavorites(id, array) {
+  let index = array.findIndex((data) => data.id === id);
+  return index >= 0 ? true : false;
+}
+
+function findIndexOfElementInArrayById(id, array) {
+  let index = array.findIndex((data) => data.id === id);
+  return index;
 }
