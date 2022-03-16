@@ -1,6 +1,6 @@
 header {
   width: 100%;
-  height: 100px;
+  height: 80px;
   background-color: rgb(107, 227, 243);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -10,7 +10,7 @@ header {
 
 .header__logo-div {
   width: 350px;
-  height: 60px;
+  height: 40px;
   background-color: rgb(197, 183, 209);
   padding-left: 40px;
   display: flex;
@@ -22,6 +22,10 @@ header {
   font-family: "Rubik Mono One";
 }
 
+.header__logo-div:hover {
+  cursor: pointer;
+}
+
 .header__search-div {
   display: flex;
   justify-content: center;
@@ -31,7 +35,7 @@ header {
 .header__search-div input[type="text"] {
   padding: 6px;
   border: none;
-  font-size: 25px;
+  font-size: 20px;
   border: solid 1px black;
 }
 
@@ -47,5 +51,5 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
+  font-size: 20px;
 }
