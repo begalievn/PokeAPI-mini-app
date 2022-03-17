@@ -67,9 +67,11 @@ a:active {
 
 .card button {
   margin-top: 15px;
+  width: 70px;
+  height: 30px;
 }
 
-.card button {
+.card button:hover {
   cursor: pointer;
 }
 
@@ -90,6 +92,6 @@ a:active {
   grid-gap: 20px;
   overflow-y: scroll;
   height: 95%;
-  border: solid 2px black;
+  border: inset 2px;
   background-color: rgb(41, 173, 255);
 }
