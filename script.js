@@ -55,12 +55,59 @@ fetchPokemon();
 /* Search form */
 const searchInput = document.getElementById("search-input");
 // event listener for search for search form
-searchInput.addEventListener("keydown", (e) => {
+searchInput.addEventListener("keydown", async function (e) {
   if (e.keyCode === 13) {
     // Enter button key
-    console.log("searching...");
+    console.log(this.value);
+    let query = await searchPokemon(this.value);
+    displaySearchResults(query);
   }
 });
+
+/* Function to search a poken from an API */
+async function searchPokemon(string) {
+  let urlToSearch = `https://pokeapi.co/api/v2/pokemon/${string}`;
+  let resultsArr = [];
+  let result = await fetch(urlToSearch)
+    .then((res) => res.json())
+    .then((data) => ({
+      name: data.name,
+      id: data.id,
+      image: data.sprites["front_default"],
+      type: data.types.map((type) => type.type.name).join(", "),
+    }))
+    .catch((err) => "");
+  if (typeof result === "object" && result !== null) {
+    resultsArr.push(result);
+  }
+  return resultsArr;
+}
+
+/* Function to display result of search function */
+function displaySearchResults(pokemon) {
+  let pokemonHTMLString = pokemon
+    .map((poke) => {
+      return `
+      <li id="${poke.id}" class="card">
+        <img class="card-image" src="${poke.image}" />
+        <h2 class="card-title">${poke.id}. ${poke.name}</h2>
+        <p class="card-subtitle">Type: ${poke.type}</p>
+        <button  class="${
+          isThisElementInFavorites(poke.id, favoritesArray)
+            ? "favorite-true"
+            : ""
+        }" 
+          onclick="favoriteButton(this)" 
+        >
+          Favorite
+        </button>
+      </li>
+    `;
+    })
+    .join(" ");
+
+  pokedex.innerHTML = pokemonHTMLString;
+}
 
 /* Favorite Button to add pokemon to favorites localStorage if it is not already there */
 async function favoriteButton(element) {
